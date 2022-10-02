@@ -37,17 +37,6 @@ public class MediaPipeUDPRecv : MonoBehaviour
 
     public Camera cam;
 
-    private float x; 
-    private float y;
-    private Vector2 pos;
-
-    private float globalScaleMultiplier = 1f;
-    private float scaleMin = 0.25f;
-    private float scaleMax = 0.6f;
-    private float time = 0f;
-    public float timeDelay;
-    private float temp;
-
     private static void Main()
     {
         MediaPipeUDPRecv receiveObj = new MediaPipeUDPRecv();
@@ -55,37 +44,6 @@ public class MediaPipeUDPRecv : MonoBehaviour
     }
 
     public void Start() { init(); }
-    void randomizePosition()
-    {
-        x = UnityEngine.Random.Range(-8, 8);
-        y = UnityEngine.Random.Range(-7, 7);
-        pos = new Vector2(x, y);
-        transform.position = pos;
-    }
-
-    void randomizeScale()
-    {
-        Vector3 randomizedScale = Vector3.one;
-        float newScale = UnityEngine.Random.Range(scaleMin, scaleMax);
-        randomizedScale = new Vector3(newScale, newScale, newScale);
-        transform.localScale = randomizedScale * globalScaleMultiplier;
-    }
-
-    void randomizeColor() {
-        Color myNewColor = new Color(
-            (float)UnityEngine.Random.Range(0f, 1f),
-            (float)UnityEngine.Random.Range(0f, 1f),
-            (float)UnityEngine.Random.Range(0f, 1f)
-        );
-
-        SpriteRenderer s = GetComponent<SpriteRenderer>();
-        GetComponent<SpriteRenderer>().material.color = myNewColor;
-        //s.color = myNewColor;
-    }
-
-    void randomizeTime() {
-        temp = UnityEngine.Random.Range(0, 1);
-    }
 
     private void Update()
     {
@@ -97,14 +55,6 @@ public class MediaPipeUDPRecv : MonoBehaviour
             return;
         }
         double curr = Convert.ToDouble(latestData);
-        time = time + 1f * Time.deltaTime;
-        if (time >= (timeDelay + temp - 2 * curr)) {
-            time = 0f;
-            randomizeTime();
-            randomizePosition();
-            randomizeScale();
-            randomizeColor();
-        }
 
         if (curr < 0)
         {
@@ -137,10 +87,10 @@ public class MediaPipeUDPRecv : MonoBehaviour
 
 
         // ----------------------------
-        // Abhï¿½ren
+        // Abhören
         // ----------------------------
         // Lokalen Endpunkt definieren (wo Nachrichten empfangen werden).
-        // Einen neuen Thread fï¿½r den Empfang eingehender Nachrichten erstellen.
+        // Einen neuen Thread für den Empfang eingehender Nachrichten erstellen.
         receiveThread = new Thread(
             new ThreadStart(ReceiveData));
         receiveThread.IsBackground = true;
