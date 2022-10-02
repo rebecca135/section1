@@ -35,7 +35,7 @@ public class MediaPipeUDPRecv : MonoBehaviour
     public string lastReceivedUDPPacket = "";
     public string allReceivedUDPPackets = "";
 
-    public Camera cam;
+    //public Camera cam;
     private float x; 
     private float y;
     private Vector2 pos;
@@ -94,13 +94,13 @@ public class MediaPipeUDPRecv : MonoBehaviour
 
         if (latestData.Length == 0)
         {
-            cam.backgroundColor = Color.yellow;
+           // cam.backgroundColor = Color.yellow;
             return;
         }
         double curr = Convert.ToDouble(latestData);
 
         time = time + 1f * Time.deltaTime;
-        if (time >= (timeDelay + curr)) {
+        if (time >= (timeDelay - curr)) {
             time = 0f;
             if (toggle) {
                 toggle = false;
@@ -115,7 +115,7 @@ public class MediaPipeUDPRecv : MonoBehaviour
             randomizeColor();
         }
 
-        if (curr < 0)
+        /*if (curr < 0)
         {
             cam.backgroundColor = Color.blue;
         }
@@ -130,7 +130,7 @@ public class MediaPipeUDPRecv : MonoBehaviour
         else
         {
             cam.backgroundColor = Color.black;
-        }
+        }*/
     }
 
     // init
@@ -141,8 +141,8 @@ public class MediaPipeUDPRecv : MonoBehaviour
         port = 1234;
 
         // Camden Code:
-        cam = GetComponent<Camera>();
-        cam.clearFlags = CameraClearFlags.SolidColor;
+        //cam = GetComponent<Camera>();
+        //cam.clearFlags = CameraClearFlags.SolidColor;
 
 
         // ----------------------------
