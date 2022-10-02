@@ -14,6 +14,7 @@ public class spriteToggle : MonoBehaviour
     private float time = 0f;
     public float timeDelay;
     private float temp;
+    private bool toggle = false;
     
     // Start is called before the first frame update
     void Start()
@@ -58,10 +59,17 @@ public class spriteToggle : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        randomizeTime();
         time = time + 1f * Time.deltaTime;
         if (time >= (timeDelay + temp)) {
             time = 0f;
+            if (toggle) {
+                toggle = false;
+                GetComponent<Renderer>().enabled = toggle;
+            } else if (toggle == false) {
+                toggle = true;
+                GetComponent<Renderer>().enabled = toggle;
+            }
+            randomizeTime();
             randomizePosition();
             randomizeScale();
             randomizeColor();
