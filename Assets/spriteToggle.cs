@@ -13,8 +13,9 @@ public class spriteToggle : MonoBehaviour
     private float scaleMax = 0.6f;
     private float time = 0f;
     public float timeDelay;
-    private float temp;
+    private double temp;
     private bool toggle = false;
+    public MediaPipeUDPRecv mediaPipe;
     
     // Start is called before the first frame update
     void Start()
@@ -52,15 +53,16 @@ public class spriteToggle : MonoBehaviour
         //s.color = myNewColor;
     }
 
-    void randomizeTime() {
-        temp = Random.Range(0, 1);
-    }
-
     // Update is called once per frame
     void Update()
     {
+        if (mediaPipe.curr > 0) {
+            temp = mediaPipe.curr;
+        } else {
+            temp = mediaPipe.curr;
+        }
         time = time + 1f * Time.deltaTime;
-        if (time >= (timeDelay + temp)) {
+        if (time >= (timeDelay - (temp))) {
             time = 0f;
             if (toggle) {
                 toggle = false;
@@ -69,7 +71,6 @@ public class spriteToggle : MonoBehaviour
                 toggle = true;
                 GetComponent<Renderer>().enabled = toggle;
             }
-            randomizeTime();
             randomizePosition();
             randomizeScale();
             randomizeColor();

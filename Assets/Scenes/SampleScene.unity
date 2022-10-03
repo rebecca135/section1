@@ -201,8 +201,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 65329829}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.9283, y: 0.0585, z: 0}
-  m_LocalScale: {x: 18.570454, y: 10.8551445, z: 1}
+  m_LocalPosition: {x: 0.2108, y: -0.038, z: 0}
+  m_LocalScale: {x: 22.005987, y: 11.048366, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 76172085}
@@ -394,7 +394,7 @@ MonoBehaviour:
   port: 0
   lastReceivedUDPPacket: 
   allReceivedUDPPackets: 
-  cam: {fileID: 0}
+  curr: 0
 --- !u!1 &645843868
 GameObject:
   m_ObjectHideFlags: 0
@@ -514,6 +514,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timeDelay: 1.4
+  mediaPipe: {fileID: 519420033}
 --- !u!1 &715915640
 GameObject:
   m_ObjectHideFlags: 0
@@ -546,6 +547,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timeDelay: 1
+  mediaPipe: {fileID: 519420033}
 --- !u!95 &715915642
 Animator:
   serializedVersion: 4
@@ -752,6 +754,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timeDelay: 1.2
+  mediaPipe: {fileID: 519420033}
 --- !u!1 &858007929
 GameObject:
   m_ObjectHideFlags: 0
@@ -871,6 +874,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timeDelay: 1.25
+  mediaPipe: {fileID: 519420033}
 --- !u!1 &916573935
 GameObject:
   m_ObjectHideFlags: 0
@@ -990,6 +994,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timeDelay: 1.6
+  mediaPipe: {fileID: 519420033}
 --- !u!1 &1175874648
 GameObject:
   m_ObjectHideFlags: 0
@@ -1022,6 +1027,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timeDelay: 1.5
+  mediaPipe: {fileID: 519420033}
 --- !u!95 &1175874650
 Animator:
   serializedVersion: 4

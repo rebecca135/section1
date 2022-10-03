@@ -36,17 +36,7 @@ public class MediaPipeUDPRecv : MonoBehaviour
     public string allReceivedUDPPackets = "";
 
     //public Camera cam;
-    private float x; 
-    private float y;
-    private Vector2 pos;
-
-    private float globalScaleMultiplier = 1f;
-    private float scaleMin = 0.25f;
-    private float scaleMax = 0.6f;
-    private float time = 0f;
-    public float timeDelay;
-    private float temp;
-    private bool toggle = false;
+    public double curr;
 
     private static void Main()
     {
@@ -54,39 +44,11 @@ public class MediaPipeUDPRecv : MonoBehaviour
         receiveObj.init();
     }
 
-    public void Start() { init(); }
-
-    void randomizePosition()
-    {
-        x = UnityEngine.Random.Range(-8, 8);
-        y = UnityEngine.Random.Range(-7, 7);
-        pos = new Vector2(x, y);
-        transform.position = pos;
+    public void Start() { 
+        init();
     }
 
-    void randomizeScale()
-    {
-        Vector3 randomizedScale = Vector3.one;
-        float newScale = UnityEngine.Random.Range(scaleMin, scaleMax);
-        randomizedScale = new Vector3(newScale, newScale, newScale);
-        transform.localScale = randomizedScale * globalScaleMultiplier;
-    }
 
-    void randomizeColor() {
-        Color myNewColor = new Color(
-            (float)UnityEngine.Random.Range(0f, 1f),
-            (float)UnityEngine.Random.Range(0f, 1f),
-            (float)UnityEngine.Random.Range(0f, 1f)
-        );
-
-        SpriteRenderer s = GetComponent<SpriteRenderer>();
-        GetComponent<SpriteRenderer>().material.color = myNewColor;
-        //s.color = myNewColor;
-    }
-
-    /*void randomizeTime() {
-        temp = Random.Range(0, 1);
-    }*/
 
     private void Update()
     {
@@ -97,23 +59,31 @@ public class MediaPipeUDPRecv : MonoBehaviour
            // cam.backgroundColor = Color.yellow;
             return;
         }
-        double curr = Convert.ToDouble(latestData);
+        curr = Convert.ToDouble(latestData);
 
-        time = time + 1f * Time.deltaTime;
+        /*time = time + 1f * Time.deltaTime;
         if (time >= (timeDelay - curr)) {
             time = 0f;
             if (toggle) {
                 toggle = false;
+                foreach (GameObject flower in flowers) {
+                    flower.GetComponent<Renderer>().enabled = toggle;
+                }
                 GetComponent<Renderer>().enabled = toggle;
             } else if (toggle == false) {
                 toggle = true;
+                foreach (GameObject flower in flowers) {
+                    flower.GetComponent<Renderer>().enabled = toggle;
+                }
                 GetComponent<Renderer>().enabled = toggle;
             }
             //randomizeTime();
-            randomizePosition();
-            randomizeScale();
-            randomizeColor();
-        }
+            foreach (GameObject flower in flowers) {
+                flower.randomizePosition();
+                randomizeScale();
+                randomizeColor();
+            }
+        }*/
 
         /*if (curr < 0)
         {
