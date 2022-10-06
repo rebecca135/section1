@@ -1,0 +1,64 @@
+Mediapipe Reciever Notes:
+You can only attach the MediaPipeUDPRecv.cs script to one object, just because of how the UDP packets
+work. I found it easiest to attach it to the camera so the script is running, and then set the output
+data as a public variable so it can be used in other scripts.
+
+First part of the MediaPipeUDPRecv.cs file looks like this:
+public class MediaPipeUDPRecv : MonoBehaviour
+{
+
+    // receiving Thread
+    Thread receiveThread;
+    Mutex textLock = new Mutex();
+
+    // udpclient object
+    UdpClient client;
+
+    // public
+    // public string IP = "127.0.0.1"; default local
+    public int port;
+
+    // infos
+    public string lastReceivedUDPPacket = "";
+    public string allReceivedUDPPackets = "";
+
+    //public Camera cam;
+    public double curr;
+
+    private static void Main()
+    {
+        MediaPipeUDPRecv receiveObj = new MediaPipeUDPRecv();
+        receiveObj.init();
+    }
+
+    public void Start() { 
+        init();
+    }
+
+
+
+    private void Update()
+    {
+        string latestData = getLatestUDPPacket();
+
+        if (latestData.Length == 0)
+        {
+           // cam.backgroundColor = Color.yellow;
+            return;
+        }
+        curr = Convert.ToDouble(latestData);
+    }
+
+*Note the presence of the public double curr variable
+
+
+In order to access this curr variable in a separate script, you need to declare a public
+MediaPipeUDPRecv variable in another script.
+Ex. public MediaPipeUDPRecv mediaPipe;
+
+To access the curr data, use mediaPipe.curr, which will pull the curr variable from the mediapipe
+script. In the Unity inspector for the object your secondary script is attached to, there will be a box
+for the MediaPipeUDPRecv object. Go ahead and attach the object that is running the MediaPipeUDPRecv.cs
+script. This will ensure that the curr variable is properly connected.
+
+You can do this for any script that you want to have UDP input to.

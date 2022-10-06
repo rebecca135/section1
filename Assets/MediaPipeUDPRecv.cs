@@ -60,47 +60,6 @@ public class MediaPipeUDPRecv : MonoBehaviour
             return;
         }
         curr = Convert.ToDouble(latestData);
-
-        /*time = time + 1f * Time.deltaTime;
-        if (time >= (timeDelay - curr)) {
-            time = 0f;
-            if (toggle) {
-                toggle = false;
-                foreach (GameObject flower in flowers) {
-                    flower.GetComponent<Renderer>().enabled = toggle;
-                }
-                GetComponent<Renderer>().enabled = toggle;
-            } else if (toggle == false) {
-                toggle = true;
-                foreach (GameObject flower in flowers) {
-                    flower.GetComponent<Renderer>().enabled = toggle;
-                }
-                GetComponent<Renderer>().enabled = toggle;
-            }
-            //randomizeTime();
-            foreach (GameObject flower in flowers) {
-                flower.randomizePosition();
-                randomizeScale();
-                randomizeColor();
-            }
-        }*/
-
-        /*if (curr < 0)
-        {
-            cam.backgroundColor = Color.blue;
-        }
-        else if (curr < .1)
-        {
-            cam.backgroundColor = Color.red;
-        }
-        else if (curr < .2)
-        {
-            cam.backgroundColor = Color.grey;
-        }
-        else
-        {
-            cam.backgroundColor = Color.black;
-        }*/
     }
 
     // init

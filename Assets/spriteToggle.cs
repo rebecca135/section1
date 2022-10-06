@@ -10,7 +10,7 @@ public class spriteToggle : MonoBehaviour
 
     private float globalScaleMultiplier = 1f;
     private float scaleMin = 0.25f;
-    private float scaleMax = 0.6f;
+    private float scaleMax = 0.5f;
     private float time = 0f;
     public float timeDelay;
     private double temp;
@@ -28,7 +28,7 @@ public class spriteToggle : MonoBehaviour
     void randomizePosition()
     {
         x = Random.Range(-8, 8);
-        y = Random.Range(-7, 7);
+        y = Random.Range(-6, 6);
         pos = new Vector2(x, y);
         transform.position = pos;
     }
@@ -56,13 +56,13 @@ public class spriteToggle : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (mediaPipe.curr > 0) {
-            temp = mediaPipe.curr;
+        if (mediaPipe.curr < 0) {
+            temp = mediaPipe.curr - 1;
         } else {
             temp = mediaPipe.curr;
         }
         time = time + 1f * Time.deltaTime;
-        if (time >= (timeDelay - (temp))) {
+        if (time >= (timeDelay - mediaPipe.curr)) {
             time = 0f;
             if (toggle) {
                 toggle = false;
