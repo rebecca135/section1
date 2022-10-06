@@ -67,7 +67,7 @@ public class MediaPipeUDPRecv : MonoBehaviour
     {
 
         // define port
-        port = 1234;
+        port = 10001;
 
         // Camden Code:
         //cam = GetComponent<Camera>();
@@ -104,7 +104,7 @@ public class MediaPipeUDPRecv : MonoBehaviour
                 string text = Encoding.UTF8.GetString(data);
 
                 // Display the retrieved text.
-                print(">> " + text);
+                //print(">> " + text);
 
                 // begin thread lock
                 textLock.WaitOne();

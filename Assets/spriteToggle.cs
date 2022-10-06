@@ -9,11 +9,12 @@ public class spriteToggle : MonoBehaviour
     private Vector2 pos;
 
     private float globalScaleMultiplier = 1f;
-    private float scaleMin = 0.25f;
-    private float scaleMax = 0.5f;
+    private float scaleMin = 0.1f;
+    private float scaleMax = 0.35f;
     private float time = 0f;
     public float timeDelay;
     private double temp;
+    private float timeRandom;
     private bool toggle = false;
     public MediaPipeUDPRecv mediaPipe;
     
@@ -27,8 +28,8 @@ public class spriteToggle : MonoBehaviour
 
     void randomizePosition()
     {
-        x = Random.Range(-8, 8);
-        y = Random.Range(-6, 6);
+        x = Random.Range(-7, 7);
+        y = Random.Range(-5, 5);
         pos = new Vector2(x, y);
         transform.position = pos;
     }
@@ -53,16 +54,21 @@ public class spriteToggle : MonoBehaviour
         //s.color = myNewColor;
     }
 
+    void randomizeTime() {
+        timeRandom = (float)Random.Range(0f, 0.25f);
+    }
+
     // Update is called once per frame
     void Update()
     {
+        print(">>" + mediaPipe.curr);
         if (mediaPipe.curr < 0) {
-            temp = mediaPipe.curr - 1;
+            temp = mediaPipe.curr - 1.25;
         } else {
             temp = mediaPipe.curr;
         }
         time = time + 1f * Time.deltaTime;
-        if (time >= (timeDelay - mediaPipe.curr)) {
+        if (time >= (timeDelay + timeRandom - temp)) {
             time = 0f;
             if (toggle) {
                 toggle = false;
@@ -71,6 +77,7 @@ public class spriteToggle : MonoBehaviour
                 toggle = true;
                 GetComponent<Renderer>().enabled = toggle;
             }
+            randomizeTime();
             randomizePosition();
             randomizeScale();
             randomizeColor();
