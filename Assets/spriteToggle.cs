@@ -43,10 +43,12 @@ public class spriteToggle : MonoBehaviour
     }
 
     void randomizeColor() {
+        float colorVar = (float)mediaPipe.curr / 3;
         Color myNewColor = new Color(
-            (float)Random.Range(0f, 1f),
-            (float)Random.Range(0f, 1f),
-            (float)Random.Range(0f, 1f)
+            (float)Random.Range((0.1f + colorVar), (0.6f + colorVar)),
+            (float)Random.Range((0.1f + colorVar), (0.6f + colorVar)),
+            (float)Random.Range((0.1f + colorVar), (0.6f + colorVar)),
+            (float)Random.Range((0.5f + colorVar), (0.6f + colorVar))
         );
 
         SpriteRenderer s = GetComponent<SpriteRenderer>();
@@ -61,11 +63,11 @@ public class spriteToggle : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        print(">>" + mediaPipe.curr);
+        //print(">>" + mediaPipe.curr);
         if (mediaPipe.curr < 0) {
-            temp = mediaPipe.curr - 1.25;
+            temp = 3 * (0 - (mediaPipe.curr * mediaPipe.curr)) - 1.5;
         } else {
-            temp = mediaPipe.curr;
+            temp = mediaPipe.curr * mediaPipe.curr + 0.5;
         }
         time = time + 1f * Time.deltaTime;
         if (time >= (timeDelay + timeRandom - temp)) {
