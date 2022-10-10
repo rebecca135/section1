@@ -13,10 +13,12 @@ public class spriteToggle : MonoBehaviour
     private float scaleMax = 0.35f;
     private float time = 0f;
     public float timeDelay;
+    public float threshold;
     private double temp;
     private float timeRandom;
     private bool toggle = false;
     public MediaPipeUDPRecv mediaPipe;
+    public GameObject dupe;
     
     // Start is called before the first frame update
     void Start()
@@ -63,21 +65,33 @@ public class spriteToggle : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //print(">>" + mediaPipe.curr);
-        if (mediaPipe.curr < 0) {
-            temp = 3 * (0 - (mediaPipe.curr * mediaPipe.curr)) - 1.5;
-        } else {
+        if (mediaPipe.curr > 0) {
             temp = mediaPipe.curr * mediaPipe.curr + 0.5;
+        } else {
+            temp = 3 * (0 - (mediaPipe.curr * mediaPipe.curr)) - 1.5;
         }
+        print(">>" + dupe.GetComponent<Renderer>().enabled);
         time = time + 1f * Time.deltaTime;
         if (time >= (timeDelay + timeRandom - temp)) {
             time = 0f;
             if (toggle) {
                 toggle = false;
-                GetComponent<Renderer>().enabled = toggle;
+                if (mediaPipe.curr > threshold) {
+                    GetComponent<Renderer>().enabled = toggle;
+                    dupe.GetComponent<Renderer>().enabled = true;
+                } else {
+                    GetComponent<Renderer>().enabled = toggle;
+                    dupe.GetComponent<Renderer>().enabled = false;
+                }
             } else if (toggle == false) {
                 toggle = true;
-                GetComponent<Renderer>().enabled = toggle;
+                if (mediaPipe.curr > threshold) {
+                    GetComponent<Renderer>().enabled = toggle;
+                    dupe.GetComponent<Renderer>().enabled = true;
+                } else {
+                    GetComponent<Renderer>().enabled = toggle;
+                    dupe.GetComponent<Renderer>().enabled = false;
+                }
             }
             randomizeTime();
             randomizePosition();
