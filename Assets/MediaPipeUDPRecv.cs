@@ -37,6 +37,8 @@ public class MediaPipeUDPRecv : MonoBehaviour
 
     //public Camera cam;
     public double curr;
+    public GameObject banner;
+    private bool intrusionFlag = false;
 
     private static void Main()
     {
@@ -46,6 +48,7 @@ public class MediaPipeUDPRecv : MonoBehaviour
 
     public void Start() { 
         init();
+        banner.GetComponent<Renderer>().enabled = false;
     }
 
 
@@ -60,6 +63,12 @@ public class MediaPipeUDPRecv : MonoBehaviour
             return;
         }
         curr = Convert.ToDouble(latestData);
+        if (curr > 3) {
+            intrusionFlag = true;
+        } else {
+            intrusionFlag = false;
+        }
+        banner.GetComponent<Renderer>().enabled = intrusionFlag;
     }
 
     // init

@@ -8,7 +8,7 @@ import json
 # UDP receiver ip & port
 # UDP_IP = "10.137.19.131"
 UDP_IP = "127.0.0.1"
-UDP_PORT = 1234
+UDP_PORT = 10001
 
 data = {
     "hw" : {
