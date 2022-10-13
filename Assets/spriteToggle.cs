@@ -45,7 +45,7 @@ public class spriteToggle : MonoBehaviour
     }
 
     void randomizeColor() {
-        float colorVar = (float)mediaPipe.curr / 3;
+        float colorVar = (float)mediaPipe.handHeight / 3;
         Color myNewColor = new Color(
             (float)Random.Range((0.1f + colorVar), (0.6f + colorVar)),
             (float)Random.Range((0.1f + colorVar), (0.6f + colorVar)),
@@ -65,17 +65,17 @@ public class spriteToggle : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (mediaPipe.curr > 0) {
-            temp = mediaPipe.curr * mediaPipe.curr + 0.5;
+        if (mediaPipe.handHeight > 0) {
+            temp = mediaPipe.handHeight * mediaPipe.handHeight + 0.5;
         } else {
-            temp = 3 * (0 - (mediaPipe.curr * mediaPipe.curr)) - 1.5;
+            temp = 3 * (0 - (mediaPipe.handHeight * mediaPipe.handHeight)) - 1.5;
         }
         time = time + 1f * Time.deltaTime;
         if (time >= (timeDelay + timeRandom - temp)) {
             time = 0f;
             if (toggle) {
                 toggle = false;
-                if (mediaPipe.curr > threshold) {
+                if (mediaPipe.handHeight > threshold) {
                     GetComponent<Renderer>().enabled = toggle;
                     dupe.GetComponent<Renderer>().enabled = true;
                 } else {
@@ -84,7 +84,7 @@ public class spriteToggle : MonoBehaviour
                 }
             } else if (toggle == false) {
                 toggle = true;
-                if (mediaPipe.curr > threshold) {
+                if (mediaPipe.handHeight > threshold) {
                     GetComponent<Renderer>().enabled = toggle;
                     dupe.GetComponent<Renderer>().enabled = true;
                 } else {

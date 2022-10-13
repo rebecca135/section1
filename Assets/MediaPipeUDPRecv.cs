@@ -4,8 +4,7 @@
     UDP-Receiver
     -----------------------
    
-    // > receive
-    // 127.0.0.1 : 1234
+   Receiving Media Pipe Data from Pose program at port 10001 on local host.
  
 */
 using UnityEngine;
@@ -16,27 +15,25 @@ using System.Net.Sockets;
 using System.Threading;
 using System.Diagnostics;
 using System.Collections.Generic;
+using Newtonsoft.Json.Linq;
 
 public class MediaPipeUDPRecv : MonoBehaviour
 {
 
     // receiving Thread
-    Thread receiveThread;
-    Mutex textLock = new Mutex();
+    private Thread receiveThread;
+    private Mutex textLock = new Mutex();
 
     // udpclient object
-    UdpClient client;
+    private UdpClient client;
 
-    // public
-    // public string IP = "127.0.0.1"; default local
-    public int port;
+    // private media pipe receiving port
+    private int mediaPort;
 
-    // infos
-    public string lastReceivedUDPPacket = "";
-    public string allReceivedUDPPackets = "";
+    // Receiver Data
+    public double handHeight;
 
-    //public Camera cam;
-    public double curr;
+    // Intrusion Flag Variables
     public GameObject banner;
     private bool intrusionFlag = false;
 
@@ -51,43 +48,24 @@ public class MediaPipeUDPRecv : MonoBehaviour
         banner.GetComponent<Renderer>().enabled = false;
     }
 
-
-
     private void Update()
     {
-        string latestData = getLatestUDPPacket();
-
-        if (latestData.Length == 0)
-        {
-           // cam.backgroundColor = Color.yellow;
-            return;
-        }
-        curr = Convert.ToDouble(latestData);
-        if (curr > 3) {
-            intrusionFlag = true;
-        } else {
-            intrusionFlag = false;
-        }
-        banner.GetComponent<Renderer>().enabled = intrusionFlag;
+        checkForIntrusion();
     }
 
     // init
     private void init()
     {
 
-        // define port
-        port = 10001;
-
-        // Camden Code:
-        //cam = GetComponent<Camera>();
-        //cam.clearFlags = CameraClearFlags.SolidColor;
+        // define mediaPort
+        mediaPort = 10001;
 
 
         // ----------------------------
-        // Abh�ren
+        // Receive Thread
         // ----------------------------
-        // Lokalen Endpunkt definieren (wo Nachrichten empfangen werden).
-        // Einen neuen Thread f�r den Empfang eingehender Nachrichten erstellen.
+        // Define local endpoint (where messages will be received).
+        // Create a new thread to receive incoming messages.
         receiveThread = new Thread(
             new ThreadStart(ReceiveData));
         receiveThread.IsBackground = true;
@@ -99,7 +77,7 @@ public class MediaPipeUDPRecv : MonoBehaviour
     private void ReceiveData()
     {
 
-        client = new UdpClient(port);
+        client = new UdpClient(mediaPort);
         while (true)
         {
 
@@ -112,16 +90,13 @@ public class MediaPipeUDPRecv : MonoBehaviour
                 // Encode bytes to text format using UTF8 encoding.
                 string text = Encoding.UTF8.GetString(data);
 
-                // Display the retrieved text.
-                //print(">> " + text);
+                // Display the retrieved text
+                JObject json = JObject.Parse(text);
 
                 // begin thread lock
                 textLock.WaitOne();
 
-                // latest UDPpacket
-                lastReceivedUDPPacket = text;
-
-                allReceivedUDPPackets = allReceivedUDPPackets + text;
+                handHeight = Convert.ToDouble(json["h3"]);
 
                 // release thread lock
                 textLock.ReleaseMutex();
@@ -134,14 +109,12 @@ public class MediaPipeUDPRecv : MonoBehaviour
         }
     }
 
-    // Return the latest UDP data, and empty the queue
-    public string getLatestUDPPacket()
-    {
-        string data;
-        textLock.WaitOne();
-        data = String.Copy(lastReceivedUDPPacket);
-        allReceivedUDPPackets = "";
-        textLock.ReleaseMutex();
-        return data;
+    private void checkForIntrusion(){
+        if (handHeight > 3) {
+            intrusionFlag = true;
+        } else {
+            intrusionFlag = false;
+        }
+        banner.GetComponent<Renderer>().enabled = intrusionFlag;
     }
 }
