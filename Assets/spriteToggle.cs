@@ -23,15 +23,15 @@ public class spriteToggle : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        randomizeColor();
         randomizePosition();
         randomizeScale();
-        randomizeColor();
     }
 
     void randomizePosition()
     {
-        x = Random.Range(-7, 7);
-        y = Random.Range(-5, 5);
+        x = Random.Range(-8, 8);
+        y = Random.Range((float) -5.5, (float) 5.5);
         pos = new Vector2(x, y);
         transform.position = pos;
     }
@@ -70,7 +70,6 @@ public class spriteToggle : MonoBehaviour
         } else {
             temp = 3 * (0 - (mediaPipe.curr * mediaPipe.curr)) - 1.5;
         }
-        print(">>" + dupe.GetComponent<Renderer>().enabled);
         time = time + 1f * Time.deltaTime;
         if (time >= (timeDelay + timeRandom - temp)) {
             time = 0f;
