@@ -1,15 +1,15 @@
-#WORKED ON COMPUTER 1 BUT NOT ANOTHER FOR SOME REASON. I WILL FIGURE THAT OUT LATER
-
 import cv2
 import mediapipe as mp
 import socket
 import json
 
 # UDP receiver ip & port
-# UDP_IP = "10.137.19.131"
-UDP_IP = "127.0.0.1"
-UDP_PORT = 10001
+UDP_IP = "130.207.227.198"
+UDP_PORT = 10099
 
+UDP_IP_3 = "127.0.0.1"
+UDP_PORT_3 = 10001 # Unity Section 1 Camera
+UDP_PORT_4 = 20003 # Max Section 1 Camera
 data = {
     "hw" : {
         "yR" : 0,
@@ -28,6 +28,10 @@ def highestWrist(leftWrist, rightWrist, rightShoulder, leftShoulder, rightHip, l
     yMax = min(leftWrist, rightWrist)
     div = abs(sternum - hip)
     yRel = ((sternum - yMax) / div)
+    if yRel > 1:
+        yRel = 1
+    if yRel < -1:
+        yRel = -1
     yRel = "{:.2f}".format(yRel)
     yRel = float(yRel)
     return yRel
@@ -44,7 +48,7 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
         image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         image.flags.writeable = False
 
-        # Make detectionq
+        # Make detection
         results = pose.process(image)
 
         # Recolor back to BGR
@@ -66,12 +70,21 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
 
 
             yRel = highestWrist(leftWrist, rightWrist, rightShoulder, leftShoulder, rightHip, leftHip)
-            print(yRel)
+            # print(yRel)
         # Send UDP message to target
             #data["highest_wrist"]["yRel"] = yRel
             #MESSAGE = bytes(json.dumps(data), "ascii")
             #print(MESSAGE)
-            sock.sendto(str(yRel).encode('UTF-8'), (UDP_IP, UDP_PORT))    
+            #problem might be in this line?
+            data = {
+                "h3" : yRel
+            }
+
+            data = bytes(json.dumps(data), 'UTF-8')
+            sock.sendto(data, (UDP_IP, UDP_PORT))  
+
+            sock.sendto(data, (UDP_IP_3, UDP_PORT_3)) 
+            sock.sendto(data, (UDP_IP_3, UDP_PORT_4)) 
         except:
             pass
 
