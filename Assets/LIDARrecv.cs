@@ -32,6 +32,7 @@ public class LIDARrecv : MonoBehaviour
 
     // Receiver Data
     public double intrusionData;
+    public double occupancyData;
 
     // Intrusion Flag Variables
     public GameObject banner;
@@ -96,7 +97,8 @@ public class LIDARrecv : MonoBehaviour
                 // begin thread lock
                 textLock.WaitOne();
 
-                intrusionData = Convert.ToDouble(json["h3"]);
+                intrusionData = Convert.ToDouble(json["intrusion"]);
+                occupancyData = Convert.ToDouble(json["occupancy"]);
 
                 // release thread lock
                 textLock.ReleaseMutex();
@@ -110,7 +112,7 @@ public class LIDARrecv : MonoBehaviour
     }
 
     private void checkForIntrusion(){
-        if (intrusionData > 3) {
+        if (intrusionData == 1) {
             intrusionFlag = true;
         } else {
             intrusionFlag = false;
