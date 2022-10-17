@@ -17,7 +17,7 @@ using System.Diagnostics;
 using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 
-public class MediaPipeUDPRecv : MonoBehaviour
+public class LIDARrecv : MonoBehaviour
 {
 
     // receiving Thread
@@ -31,20 +31,26 @@ public class MediaPipeUDPRecv : MonoBehaviour
     private int mediaPort;
 
     // Receiver Data
-    public double handHeight;
+    public double intrusionData;
+
+    // Intrusion Flag Variables
+    public GameObject banner;
+    private bool intrusionFlag = false;
 
     private static void Main()
     {
-        MediaPipeUDPRecv receiveObj = new MediaPipeUDPRecv();
+        LIDARrecv receiveObj = new LIDARrecv();
         receiveObj.init();
     }
 
     public void Start() { 
         init();
+        banner.GetComponent<Renderer>().enabled = false;
     }
 
     private void Update()
     {
+        checkForIntrusion();
     }
 
     // init
@@ -52,7 +58,7 @@ public class MediaPipeUDPRecv : MonoBehaviour
     {
 
         // define mediaPort
-        mediaPort = 10001;
+        mediaPort = 20020;
 
 
         // ----------------------------
@@ -90,7 +96,7 @@ public class MediaPipeUDPRecv : MonoBehaviour
                 // begin thread lock
                 textLock.WaitOne();
 
-                handHeight = Convert.ToDouble(json["h3"]);
+                intrusionData = Convert.ToDouble(json["h3"]);
 
                 // release thread lock
                 textLock.ReleaseMutex();
@@ -101,5 +107,14 @@ public class MediaPipeUDPRecv : MonoBehaviour
                 print(err.ToString());
             }
         }
+    }
+
+    private void checkForIntrusion(){
+        if (intrusionData > 3) {
+            intrusionFlag = true;
+        } else {
+            intrusionFlag = false;
+        }
+        banner.GetComponent<Renderer>().enabled = intrusionFlag;
     }
 }
