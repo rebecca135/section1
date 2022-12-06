@@ -90,7 +90,7 @@ public class MediaPipeUDPRecv : MonoBehaviour
                 // begin thread lock
                 textLock.WaitOne();
 
-                handHeight = Convert.ToDouble(json["h3"]);
+                handHeight = Convert.ToDouble(json["h1"]);
 
                 // release thread lock
                 textLock.ReleaseMutex();

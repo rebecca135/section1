@@ -30,7 +30,7 @@ public class spriteToggle : MonoBehaviour
 
     void randomizePosition()
     {
-        x = Random.Range(-8, 8);
+        x = Random.Range(-5, 5);
         y = Random.Range((float) -5.5, (float) 5.5);
         pos = new Vector2(x, y);
         transform.position = pos;

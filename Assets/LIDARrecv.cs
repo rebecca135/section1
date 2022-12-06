@@ -36,7 +36,10 @@ public class LIDARrecv : MonoBehaviour
 
     // Intrusion Flag Variables
     public GameObject banner;
-    private bool intrusionFlag = false;
+    public bool intrusionFlag = false;
+    private bool timeCheck = false;
+    private float timeCounter = 0;
+    private float counter = 5;
 
     private static void Main()
     {
@@ -52,6 +55,16 @@ public class LIDARrecv : MonoBehaviour
     private void Update()
     {
         checkForIntrusion();
+        if (timeCheck)
+        {
+            timeCounter += Time.deltaTime;
+            if (timeCounter > counter)
+            {
+                timeCounter = 0;
+                timeCheck = false;
+                intrusionFlag = false;
+            }
+        }
     }
 
     // init
@@ -114,8 +127,7 @@ public class LIDARrecv : MonoBehaviour
     private void checkForIntrusion(){
         if (intrusionData == 1) {
             intrusionFlag = true;
-        } else {
-            intrusionFlag = false;
+            timeCheck = true;
         }
         banner.GetComponent<Renderer>().enabled = intrusionFlag;
     }

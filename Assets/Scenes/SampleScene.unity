@@ -331,6 +331,7 @@ MonoBehaviour:
   intrusionData: 0
   occupancyData: 0
   banner: {fileID: 61186626}
+  intrusionFlag: 0
 --- !u!4 &321056328
 Transform:
   m_ObjectHideFlags: 0
@@ -1599,6 +1600,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -7871556540511652807, guid: 6fd3d4ebf2b38a54cb9440016e623356, type: 3}
+      propertyPath: m_FlipX
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: -7871556540511652807, guid: 6fd3d4ebf2b38a54cb9440016e623356, type: 3}
       propertyPath: m_SortingLayer
       value: 2
