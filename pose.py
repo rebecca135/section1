@@ -2,20 +2,31 @@ import cv2
 import mediapipe as mp
 import socket
 import json
+from socket import *
 
 # UDP receiver ip & port
-UDP_IP = "130.207.227.198"
-UDP_PORT = 10099
 
 UDP_IP_3 = "127.0.0.1"
 UDP_PORT_3 = 10001 # Unity Section 1 Camera
 UDP_PORT_4 = 20003 # Max Section 1 Camera
+
+UDP_IP_5 = "10.137.19.131" # Ethernet Shield 1 for small mushroom light show
+UDP_PORT_5 = 10050 # Small Mushroom Light Show
+
+UDP_IP_6 = "10.137.19.140" # Ethernet Shield 2 for Glowing Eyes Owl and funky tree lights
+UDP_PORT_6 = 15001 # Glowing Eyes Owl
+
+SERVER_PORT = 20030
+SERVER_IP = "10.137.19.141"
+
 data = {
     "hw" : {
         "yR" : 0,
         "st" : 0
     }
 }
+
+intrusion = {"intrusion" : 0}
 
 mp_drawing = mp.solutions.drawing_utils
 mp_pose = mp.solutions.pose
@@ -36,13 +47,17 @@ def highestWrist(leftWrist, rightWrist, rightShoulder, leftShoulder, rightHip, l
     yRel = float(yRel)
     return yRel
 
-sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # UDP
+sock = socket(AF_INET, SOCK_DGRAM) # UDP
 yRel = 0
 
 cap = cv2.VideoCapture(0)
 with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as pose:
+#    serverSocket = socket(AF_INET, SOCK_DGRAM)
+#    serverSocket.bind((SERVER_IP, SERVER_PORT))
 
     while cap.isOpened():
+        # data = serverSocket.recv(1024)
+        # intrusion = json.loads(data.decode())
         ret, frame = cap.read()
         # Recolor image to RGB
         image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
@@ -77,15 +92,32 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
             #print(MESSAGE)
             #problem might be in this line?
             data = {
-                "h3" : yRel
+                "h1" : yRel,
+                "intrusion" : intrusion["intrusion"]
             }
 
             data = bytes(json.dumps(data), 'UTF-8')
-            sock.sendto(data, (UDP_IP, UDP_PORT))  
+            #sock.sendto(data, (UDP_IP, UDP_PORT))  
 
             sock.sendto(data, (UDP_IP_3, UDP_PORT_3)) 
-            sock.sendto(data, (UDP_IP_3, UDP_PORT_4)) 
+#            sock.sendto(data, (UDP_IP_3, UDP_PORT_4))
+#            sock.sendto(data, (UDP_IP_5, UDP_PORT_5))  
+#            sock.sendto(data, (UDP_IP_6, UDP_PORT_6))  
         except:
+            yRel = -1
+            data = {
+                "h1" : yRel,
+                "intrusion" : intrusion["intrusion"]
+            }
+           
+
+            data = bytes(json.dumps(data), 'UTF-8')
+            #sock.sendto(data, (UDP_IP, UDP_PORT))  
+
+            sock.sendto(data, (UDP_IP_3, UDP_PORT_3)) 
+#            sock.sendto(data, (UDP_IP_3, UDP_PORT_4)) 
+#            sock.sendto(data, (UDP_IP_5, UDP_PORT_5)) 
+#            sock.sendto(data, (UDP_IP_6, UDP_PORT_6))
             pass
 
         # display info

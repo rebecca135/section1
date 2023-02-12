@@ -10,7 +10,7 @@ public class spriteToggle : MonoBehaviour
 
     private float globalScaleMultiplier = 1f;
     private float scaleMin = 0.1f;
-    private float scaleMax = 0.35f;
+    private float scaleMax = 1.3f;
     private float time = 0f;
     public float timeDelay;
     public float threshold;
@@ -19,6 +19,13 @@ public class spriteToggle : MonoBehaviour
     private bool toggle = false;
     public MediaPipeUDPRecv mediaPipe;
     public GameObject dupe;
+
+    private int count = 0;
+    public double movingAverage;
+    private double prevMovingAverage = -1;
+    private int movingAverageLen;
+    private float updateTime = 0f;
+    private float updateTime1 = 0f;
     
     // Start is called before the first frame update
     void Start()
@@ -40,6 +47,9 @@ public class spriteToggle : MonoBehaviour
     {
         Vector3 randomizedScale = Vector3.one;
         float newScale = Random.Range(scaleMin, scaleMax);
+        if (mediaPipe.handHeight > 0.5) {
+            newScale += 0.3f;
+        }
         randomizedScale = new Vector3(newScale, newScale, newScale);
         transform.localScale = randomizedScale * globalScaleMultiplier;
     }
@@ -65,6 +75,25 @@ public class spriteToggle : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        updateTime = updateTime + 1f * Time.deltaTime;
+        count++;
+        
+        if (updateTime > 0.5) {
+            updateTime = 0;
+            print("moving average: " + (movingAverage ));
+            print("prev average: " + prevMovingAverage);
+            prevMovingAverage = movingAverage;
+            if (count > movingAverageLen) {
+                movingAverage = movingAverage + (mediaPipe.handHeight - movingAverage) / (movingAverageLen + 1);
+            } else {
+                movingAverage += mediaPipe.handHeight;
+                if (count == movingAverageLen) {
+                    movingAverage = movingAverage / count;
+                }
+        }
+        }
+        
+
         if (mediaPipe.handHeight > 0) {
             temp = mediaPipe.handHeight * mediaPipe.handHeight + 0.5;
         } else {
@@ -96,6 +125,17 @@ public class spriteToggle : MonoBehaviour
             randomizePosition();
             randomizeScale();
             randomizeColor();
+        }
+
+        
+        updateTime1 += Time.deltaTime;
+        if (updateTime1 > 1) {
+            updateTime1 = 0f;
+            if (prevMovingAverage > movingAverage) {
+                randomizePosition();
+                randomizeScale();
+                randomizeColor();
+            }
         }
     }
 }
